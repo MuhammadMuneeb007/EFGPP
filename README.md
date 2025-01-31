@@ -1,2 +1,3 @@
 # EFGP
-Exploratory Framework for Genetic Production
+Exploratory Framework for Genotype-Phenotype Prediction
+
