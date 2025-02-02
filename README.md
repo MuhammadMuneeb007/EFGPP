@@ -129,6 +129,7 @@ EFGPP/depression/
 Execute this command for quality controls. Specify the Phenotype and GWAS file as arguments:
 ```bash
 python Step2-GWASAndIndividualGenotypeDataQualityControls.py migraine migraine_5.gz
+python Step2-GWASAndIndividualGenotypeDataQualityControls.py Phenotype GWASFile
 ```
 
 ### Step 2: Split Data
@@ -149,26 +150,30 @@ phenotype_paths = [
 Perform p-value threshold on the genotype data:
 ```bash
 python Step3-PrepareDataForGenotypeMachineDeepLearning-P-valueThreshold.py migraine migraine_5 0
+python Step3-PrepareDataForGenotypeMachineDeepLearning-P-valueThreshold.py Phenotype GWASFile Fold
 ```
 
 ### Step 3.1: Functional Annotations
 Append functional annotations with the genotype data:
 ```bash
 python Step3.1-UpdateGenotypeWithAnnotationData.py migraine migraine_5 0
+python Step3.1-UpdateGenotypeWithAnnotationData.py Phenotype GWASFile Fold
 ```
 
 ### Step 4: Generate PCA
 Generate PCA for genotype data:
 ```bash
 python Step4-GeneratePCA.py migraine migraine_5
+python Step4-GeneratePCA.py Phenotype GWASFile
 ```
 
 ### Step 5: Generate PRS
 ```bash
+python Plink.py Phenotype GWASFile 0 
 python Plink.py migraine migraine_5 0
 python LDAK-GWAS.py migraine migraine_5 0
 python PRSice-2.py migraine migraine_5 0
-python Plink.py migraine migraine_5 0
+python AnnoPredCode.py migraine migraine_5 0
 ```
 
 > **Note**: Make sure to download Plink, LDAK, and LDAK-GWAS, and PRSice-2
