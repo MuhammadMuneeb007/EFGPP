@@ -52,7 +52,7 @@ EFGPP/Phenotype/Phenotype_2/Phenotype.height (FID,IID,Height)
 ```
 
 ### Sample File Formats
-
+Name Height should be the same, but the actual value should be of a specific Phenotype. It is just a placeholder. 
 Sample `EFGPP/Phenotype/Phenotype_2/Phenotype.height`:
 ```
 IID     FID     Height
