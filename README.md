@@ -307,7 +307,7 @@ Example visualization:
 For detailed cluster analysis:
 
 ```bash
-python Step10.1-CoreBaseDataAnalysisPrediction.py migraine ResultsML 
+python Step10.1-CoreBaseDataClusterAnalysis.py migraine ResultsML 
 ```
 
 Example cluster visualization:
