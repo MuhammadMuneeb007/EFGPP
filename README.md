@@ -171,17 +171,17 @@ python Step4-GeneratePCA.py Phenotype GWASFile
 Generate PRS scores using various tools:
 ```bash
 # Using Plink
-python Plink.py Phenotype GWASFile 0 
-python Plink.py migraine migraine_5 0
+python Step5-Plink.py Phenotype GWASFile 0 
+python Step5-Plink.py migraine migraine_5 0
 
 # Using LDAK-GWAS
-python LDAK-GWAS.py migraine migraine_5 0
+python Step5-LDAK-GWAS.py migraine migraine_5 0
 
 # Using PRSice-2
-python PRSice-2.py migraine migraine_5 0
+python Step5-PRSice-2.py migraine migraine_5 0
 
 # Using AnnoPred
-python AnnoPredCode.py migraine migraine_5 0
+python Step5-AnnoPredCode.py migraine migraine_5 0
 ```
 
 **Note**: Before running these commands:
@@ -192,8 +192,8 @@ python AnnoPredCode.py migraine migraine_5 0
 
 Generate the core base datasets:
 ```bash
-python CoreBaseDataGenerator.py Phenotype Fold
-python CoreBaseDataGenerator.py migraine 0 
+python Step6-CoreBaseDataGenerator.py Phenotype Fold
+python Step6-CoreBaseDataGenerator.py migraine 0 
 ```
 
 This will create datasets in:
@@ -230,33 +230,52 @@ Analyze datasets across folds using these commands:
 
 ```bash
 # Find unique datasets for a specific fold
-python CoreBaseDataSelection-FindSimilarity.py Phenotype Fold
-python CoreBaseDataSelection-FindSimilarity.py migraine 0
+python Step7-CoreBaseDataSelection-FindSimilarity.py Phenotype Fold
+python Step7-CoreBaseDataSelection-FindSimilarity.py migraine 0
 
 # Find common datasets across all folds
-python CoreBaseDataSelection-FindCommon.py Phenotype
-python CoreBaseDataSelection-FindCommon.py migraine
+python Step7.1-CoreBaseDataSelection-FindCommon.py Phenotype
+python Step7.1-CoreBaseDataSelection-FindCommon.py migraine
 ```
 
 Results will be stored in: `EFGPP/migraine/Results/UniqueDatasets.txt`
+### Step 8: ML/DL Algorithm Application
 
-### Step 8: Apply ML/DL Algorithms
-
-Use this command format to run predictions:
+Apply machine learning and deep learning algorithms using:
 
 ```bash
-python CoreBasePredictor.py Phenotype Fold NumberofDataset Algorithm
+python Step8-CoreBasePredictor.py Phenotype Fold NumberofDataset Algorithm
 ```
 
-Examples:
-- For machine learning on fold 0, dataset 1:
+Example commands:
+- For machine learning:
     ```bash
     python CoreBasePredictor.py migraine 0 1 ML
     ```
-- For deep learning on fold 0, dataset 1:
+- For deep learning:
     ```bash
     python CoreBasePredictor.py migraine 0 1 DL
     ```
 
+### Step 9: Results Aggregation
 
+Aggregate results across folds per dataset:
 
+```bash
+# For machine learning results
+python Step9-CoreBasePredictorAggregate.py migraine ResultsML 0.5
+
+# For deep learning results
+python Step9-CoreBasePredictorAggregate.py migraine ResultsDL 0.5
+```
+
+Results are stored in `EFGPP/migraine/Results/ResultsML/Aggregated`
+
+#### Sample Results Format
+
+```csv
+Dataset,Model,ML_Parameters,Train AUC,Validation AUC,Test AUC,...
+1,Naive Bayes,{'var_smoothing': 1e-07},0.7487,0.5550,0.5867,...
+2,Logistic Regression,{'C': 0.1, 'penalty': 'l2'},0.6540,0.5378,0.5419,...
+3,Logistic Regression,{'C': 1.0, 'penalty': 'l2'},0.6483,0.6286,0.6321,...
+```
