@@ -257,7 +257,7 @@ Example commands:
     python CoreBasePredictor.py migraine 0 1 DL
     ```
 
-    
+
 ### Step 9: Results Aggregation
 
 Aggregate results across folds per dataset:
@@ -281,22 +281,36 @@ Dataset,Model,ML_Parameters,Train AUC,Validation AUC,Test AUC,...
 3,Logistic Regression,{'C': 1.0, 'penalty': 'l2'},0.6483,0.6286,0.6321,...
 ```
 
-### Step 10: Data Analysis
+### Step 10: Exploratory Data Analysis
 
-Execute the exploratory data analysis:
+Analyze your results with:
 
 ```bash
+# For basic exploratory data analysis
 python Step10-CoreBaseExploratoryDataAnalysis.py migraine ResultsML 
 ```
 
-This analysis generates insights including:
-- Top Models and Their Frequency
-- Best AUC metrics (Train/Validation/Test) for:
-    - Each Phenotype-GWAS pair
-    - Each Dataset Type
-    - Each Weight File configuration
-    - Each SNP Type
-    - Each Model
+This generates comprehensive insights including:
+- Top performing models and their frequency
+- Best AUC metrics across:
+    - Phenotype-GWAS pairs
+    - Dataset types
+    - Weight file configurations
+    - SNP types
+    - Model types
 
+Example visualization:
 ![EDA Results](EDA_ML_Results.png)
+
+### Step 10.1: Cluster Analysis
+
+For detailed cluster analysis:
+
+```bash
+python Step10.1-CoreBaseDataAnalysisPrediction.py migraine ResultsML 
+```
+
+Example cluster visualization:
+![Cluster Results](Cluster_ML_Results.png)
+
 
