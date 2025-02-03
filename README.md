@@ -52,7 +52,7 @@ EFGPP/Phenotype/Phenotype_2/Phenotype.height (FID,IID,Height)
 ```
 
 ### Sample File Formats
-Name Height should be the same, but the actual value should be of a specific Phenotype. It is just a placeholder. 
+
 Sample `EFGPP/Phenotype/Phenotype_2/Phenotype.height`:
 ```
 IID     FID     Height
@@ -166,18 +166,97 @@ Generate PCA for genotype data:
 python Step4-GeneratePCA.py migraine migraine_5
 python Step4-GeneratePCA.py Phenotype GWASFile
 ```
-
 ### Step 5: Generate PRS
+
+Generate PRS scores using various tools:
 ```bash
+# Using Plink
 python Plink.py Phenotype GWASFile 0 
 python Plink.py migraine migraine_5 0
+
+# Using LDAK-GWAS
 python LDAK-GWAS.py migraine migraine_5 0
+
+# Using PRSice-2
 python PRSice-2.py migraine migraine_5 0
+
+# Using AnnoPred
 python AnnoPredCode.py migraine migraine_5 0
 ```
 
-> **Note**: Make sure to download Plink, LDAK, and LDAK-GWAS, and PRSice-2
-> Instructions available here: https://muhammadmuneeb007.github.io/PRSTools/Introduction.html
+**Note**: Before running these commands:
+- Download and install: Plink, LDAK, LDAK-GWAS, and PRSice-2
+- Installation guide: [PRSTools Installation Guide](https://muhammadmuneeb007.github.io/PRSTools/Introduction.html)
+
+### Step 6: Generate Base Datasets
+
+Generate the core base datasets:
+```bash
+python CoreBaseDataGenerator.py Phenotype Fold
+python CoreBaseDataGenerator.py migraine 0 
+```
+
+This will create datasets in:
+```
+EFGPP/migraine/Fold_0/Datasets
+EFGPP/migraine/Fold_1/Datasets
+EFGPP/migraine/Fold_2/Datasets
+EFGPP/migraine/Fold_3/Datasets
+EFGPP/migraine/Fold_4/Datasets
+```
+
+Configuration options in CoreBaseDataGenerator.py:
+```python
+self.phenotype_gwas_pairs = [
+    ("migraine", "migraine.gz"),
+    ("migraine", "migraine_5.gz"),
+    # ("depression", "depression_11.gz"),
+    # ("depression", "depression_4.gz"),
+    # ("depression", "depression_17.gz"),
+]
+
+self.models = ["Plink", "PRSice-2", "AnnoPred", "LDAK-GWAS"]
+self.pca_components = 10
+self.scaling_options = [False]  # Can be [True, False]
+self.snp_options = [
+    "snps_50", "snps_200", "snps_500", "snps_1000",
+    "snps_5000", "snps_10000", "snps_annotated_50",
+    "snps_annotated_200", "snps_annotated_500"
+]
+```
+### Step 7: Dataset Analysis
+
+Analyze datasets across folds using these commands:
+
+```bash
+# Find unique datasets for a specific fold
+python CoreBaseDataSelection-FindSimilarity.py Phenotype Fold
+python CoreBaseDataSelection-FindSimilarity.py migraine 0
+
+# Find common datasets across all folds
+python CoreBaseDataSelection-FindCommon.py Phenotype
+python CoreBaseDataSelection-FindCommon.py migraine
+```
+
+Results will be stored in: `EFGPP/migraine/Results/UniqueDatasets.txt`
+
+### Step 8: Apply ML/DL Algorithms
+
+Use this command format to run predictions:
+
+```bash
+python CoreBasePredictor.py Phenotype Fold NumberofDataset Algorithm
+```
+
+Examples:
+- For machine learning on fold 0, dataset 1:
+    ```bash
+    python CoreBasePredictor.py migraine 0 1 ML
+    ```
+- For deep learning on fold 0, dataset 1:
+    ```bash
+    python CoreBasePredictor.py migraine 0 1 DL
+    ```
 
 
 
