@@ -192,8 +192,8 @@ python Step5-AnnoPredCode.py migraine migraine_5 0
 
 Generate the core base datasets:
 ```bash
-python Step6-CoreBaseDataGenerator.py Phenotype Fold
 python Step6-CoreBaseDataGenerator.py migraine 0 
+python Step6-CoreBaseDataGenerator.py Phenotype Fold
 ```
 
 This will create datasets in:
@@ -230,12 +230,12 @@ Analyze datasets across folds using these commands:
 
 ```bash
 # Find unique datasets for a specific fold
-python Step7-CoreBaseDataSelection-FindSimilarity.py Phenotype Fold
 python Step7-CoreBaseDataSelection-FindSimilarity.py migraine 0
+python Step7-CoreBaseDataSelection-FindSimilarity.py Phenotype Fold
 
 # Find common datasets across all folds
-python Step7.1-CoreBaseDataSelection-FindCommon.py Phenotype
 python Step7.1-CoreBaseDataSelection-FindCommon.py migraine
+python Step7.1-CoreBaseDataSelection-FindCommon.py Phenotype
 ```
 
 Results will be stored in: `EFGPP/migraine/Results/UniqueDatasets.txt`
@@ -264,6 +264,8 @@ Aggregate results across folds per dataset:
 
 ```bash
 # For machine learning results
+python Step9-CoreBasePredictorAggregate.py Phenotype Result_Directory  Minimum_Validation_AUC
+
 python Step9-CoreBasePredictorAggregate.py migraine ResultsML 0.5
 
 # For deep learning results
@@ -286,8 +288,9 @@ Dataset,Model,ML_Parameters,Train AUC,Validation AUC,Test AUC,...
 Analyze your results with:
 
 ```bash
-# For basic exploratory data analysis
+# For basic exploratory data analysis  
 python Step10-CoreBaseExploratoryDataAnalysis.py migraine ResultsML 
+python Step10-CoreBaseExploratoryDataAnalysis.py Phenotype Result_Directory 
 ```
 
 This generates comprehensive insights including:
@@ -304,13 +307,37 @@ Example visualization:
 
 ### Step 10.1: Cluster Analysis
 
-For detailed cluster analysis:
+Perform cluster analysis with:
 
 ```bash
+# For detailed cluster analysis
 python Step10.1-CoreBaseDataClusterAnalysis.py migraine ResultsML 
+python Step10.1-CoreBaseDataClusterAnalysis.py Phenotype Result_Directory  
 ```
 
 Example cluster visualization:
 ![Cluster Results](Cluster_ML_Results.png)
 
+### Step 11: Dataset Performance Analysis
+
+Get the best datasets based on training/validation stability and AUC:
+
+```bash
+# Find top performing datasets
+python Step11-CoreBasePredictorFindTop10.py migraine ResultsML 0.6
+python Step11-CoreBasePredictorFindTop10.py Phenotype Result_Directory Minimum_Validation_AUC
+```
+
+The composite score is calculated as:
+```python
+valid_models['Composite_Score'] = (
+    0.2 * valid_models['Validation AUC_Norm'] +
+    0.2 * valid_models['Train_Val_Gap_Norm'] +
+    0.2 * valid_models['Train_Stability_Norm'] +
+    0.2 * valid_models['Val_Stability_Norm']
+)
+```
+
+Example visualization:
+![Top Datasets ML](Top_Datasets_ML.png)
 
