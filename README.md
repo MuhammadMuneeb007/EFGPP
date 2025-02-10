@@ -318,7 +318,7 @@ python Step10.1-CoreBaseDataClusterAnalysis.py Phenotype Result_Directory
 Example cluster visualization:
 ![Cluster Results](Cluster_ML_Results.png)
 
-### Step 11: Dataset Performance Analysis
+### Step 11: Find Top Datasets
 
 Get the best datasets based on training/validation stability and AUC:
 
@@ -340,4 +340,80 @@ valid_models['Composite_Score'] = (
 
 Example visualization:
 ![Top Datasets ML](Top_Datasets_ML.png)
+
+### Step 12: Make Dataset Combinations
+
+Make categories of the data and try all combinations of the data. There are multiple ways to form the categories.
+
+For genotype data, there are 4 categories: `f"Genotype_{weight_status}_{annotation_status}_{gwas_name}"`. For PRS, there can be PRS tools * GWASFile categories: `f"PRS_{gwas_name}_{model}"` or `f"PRS_{gwas_name}"`.
+
+One can modify the following code to form different categories:
+
+```python
+for _, row in results_df.iterrows():
+    dataset_id = row['Dataset']
+    dataset_type = row['Dataset_Type'].lower()
+    annotation_status = get_annotation_status(row.get('snps'))
+    
+    # Build category key based on dataset type and properties
+    if dataset_type == 'genotype':
+        weight_status = "W" if row.get('weight_file_present', False) else 'UW'
+        gwas_name = get_gwas_name(row.get('gwas_file'))
+        category_key = f"Genotype_{weight_status}_{annotation_status}_{gwas_name}"
+        
+    elif dataset_type == 'prs':
+        gwas_name = get_gwas_name(row.get('gwas_file'))
+        model = row.get('model', 'NA')
+        category_key = f"PRS_{gwas_name}"
+        
+    elif dataset_type == 'covariates':
+        features = row.get('Features', 'NA')
+        category_key = f"Covariates"
+        
+    elif dataset_type == 'pca':
+        components = row.get('pca_components', 'NA')
+        category_key = f"PCA_{components}"
+        
+    else:
+        category_key = f"Other_{dataset_type}"
+    
+    categories[category_key].append(dataset_id)
+```
+The selected datasets for Configuration 1 and Configuration 2 are presented in Table 1 and on GitHub (Configuration1/best_datasets.csv and Configuration2/best_datasets.csv).
+
+| Dataset Type | Configuration 1 | Configuration 2 |
+|--------------|-----------------|-----------------|
+| Covariates   | Covariates      | Covariates      |
+| Genotype     | Genotype UW annotated migraine | Genotype UW annotated |
+| Genotype     | Genotype UW not annotated migraine | Genotype UW not annotated |
+| Genotype     | Genotype W annotated migraine | Genotype W annotated |
+| Genotype     | Genotype W not annotated migraine | Genotype W not annotated |
+| PCA          | PCA 10.0        | PCA 10.0        |
+| PRS          | PRS migraine 5 AnnoPred | PRS AnnoPred depression 4 |
+| PRS          | PRS migraine 5 LDAK-GWAS | PRS AnnoPred migraine |
+| PRS          | PRS migraine AnnoPred | PRS AnnoPred migraine 5 |
+| PRS          | PRS migraine LDAK-GWAS | PRS LDAK-GWAS depression 11 |
+| PRS          | PRS migraine Plink | PRS LDAK-GWAS migraine |
+| PRS          | –               | PRS LDAK-GWAS migraine 5 |
+| PRS          | –               | PRS PRSice-2 depression 11 |
+| PRS          | –               | PRS Plink depression 11 |
+| PRS          | –               | PRS Plink depression 4 |
+| PRS          | –               | PRS Plink migraine |
+
+
+
+
+Command:
+```bash
+# For detailed cluster analysis
+python Step12-Combinations.py --phenotype migraine --results_dir ResultsML
+python Step12-Combinations.py --phenotype Phenotype --results_dir Result_Directory  
+```
+
+
+### Step 13: Plot best performing combinations. 
+
+python Step13-PlotCombinations.py migraine ResultsML
+python Step13-PlotCombinations.py Phenotype Result_Directory  
+
 
