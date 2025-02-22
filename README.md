@@ -170,7 +170,7 @@ python Step4-GeneratePCA.py migraine migraine_5
 python Step4-GeneratePCA.py Phenotype GWASFile
 ```
 
-
+![EDA Dataset](Dataset.png)
 
 
 
@@ -195,6 +195,9 @@ python Step5-AnnoPredCode.py migraine migraine_5 0
 **Note**: Before running these commands:
 - Download and install: Plink, LDAK, LDAK-GWAS, and PRSice-2
 - Installation guide: [PRSTools Installation Guide](https://muhammadmuneeb007.github.io/PRSTools/Introduction.html)
+
+
+
 
 ### Step 6: Generate Base Datasets
 
@@ -232,7 +235,6 @@ self.snp_options = [
     "snps_annotated_200", "snps_annotated_500"
 ]
 ```
-
 
 
 ![EDA BasePredictorss](BasePredictorss.png)
