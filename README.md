@@ -1,5 +1,8 @@
 # Exploratory Framework for Genotype-Phenotype Prediction
 
+![EDA workflow](workflow.png)
+
+
 ## Initial Setup
 
 1. Place your genotype data
