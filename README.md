@@ -169,6 +169,11 @@ Generate PCA for genotype data:
 python Step4-GeneratePCA.py migraine migraine_5
 python Step4-GeneratePCA.py Phenotype GWASFile
 ```
+
+
+
+
+
 ### Step 5: Generate PRS
 
 Generate PRS scores using various tools:
@@ -227,6 +232,12 @@ self.snp_options = [
     "snps_annotated_200", "snps_annotated_500"
 ]
 ```
+
+
+
+![EDA BasePredictorss](BasePredictorss.png)
+
+
 ### Step 7: Dataset Analysis
 
 Analyze datasets across folds using these commands:
