@@ -170,7 +170,7 @@ python Step4-GeneratePCA.py migraine migraine_5
 python Step4-GeneratePCA.py Phenotype GWASFile
 ```
 
-![EDA Dataset](Dataset.png)
+![EDA Dataset](Dataset.jpg)
 
 
 
