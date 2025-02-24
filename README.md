@@ -1,5 +1,15 @@
 # Exploratory Framework for Genotype-Phenotype Prediction
 
+##Abstract
+
+
+
+##Results
+![image](https://github.com/user-attachments/assets/0ef6bbbb-320b-4458-ad1a-c75495a0b274)
+
+![image](https://github.com/user-attachments/assets/0a6a0ec0-3dd4-4c87-892a-ebab1f94232c)
+
+
 ![EDA workflow](workflow.png)
 
 
