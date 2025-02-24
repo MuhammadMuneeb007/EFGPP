@@ -395,7 +395,14 @@ for _, row in results_df.iterrows():
     
     categories[category_key].append(dataset_id)
 ```
-The selected datasets for Configuration 1 and Configuration 2 are presented in Table 1 and on GitHub (Configuration1/best_datasets.csv and Configuration2/best_datasets.csv).
+The selected datasets for **Configuration 1** and **Configuration 2** are presented in **Table 1** and on GitHub:  
+- [Configuration1/best_datasets.csv](Configuration1/best_datasets.csv)  
+- [Configuration2/best_datasets.csv](Configuration2/best_datasets.csv)  
+
+Results for each combination are available on GitHub:  
+- [Configuration1/ResultsML1.csv](Configuration1/ResultsML1.csv)  
+- [Configuration2/ResultsML2.csv](Configuration2/ResultsML2.csv)  
+
 
 ![image](https://github.com/user-attachments/assets/97fb6670-f91f-414a-a25e-b6ccf6e1681b)
 
