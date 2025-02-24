@@ -407,19 +407,18 @@ Results for each combination are available on GitHub:
 ![image](https://github.com/user-attachments/assets/97fb6670-f91f-414a-a25e-b6ccf6e1681b)
 
  
-
-
-Command:
 ```bash
 # For detailed cluster analysis
 python Step12-Combinations.py --phenotype migraine --results_dir ResultsML
 python Step12-Combinations.py --phenotype Phenotype --results_dir Result_Directory  
 ```
 
+## Step 13: Plot Best Performing Combinations
 
-### Step 13: Plot best performing combinations. 
-
+```bash
 python Step13-PlotCombinations.py migraine ResultsML
-python Step13-PlotCombinations.py Phenotype Result_Directory  
-
+python Step13-PlotCombinations.py Phenotype Result_Directory
+```
+ 
+ 
 
