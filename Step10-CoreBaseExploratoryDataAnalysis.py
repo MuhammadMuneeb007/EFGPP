@@ -331,7 +331,7 @@ def plot_hyperparameter_impact(df, output_dir):
             
             # Get models that have this parameter
             mask = df['params_dict'].apply(lambda x: param in x if isinstance(x, dict) else False)
-            if mask.any():
+            if (mask.any()):
                 plot_df = df[mask].copy()
                 plot_df[param] = plot_df['params_dict'].apply(lambda x: x.get(param))
                 
@@ -500,6 +500,153 @@ def merge_existing_plots(output_dir, plot_files):
     
     plt.close(fig)
 
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import seaborn as sns
+import numpy as np
+import pandas as pd
+import os
+def create_publication_figure(df, output_dir):
+    """Create a publication-quality figure with 6 panels using professional styling."""
+    # Set style parameters
+     
+    plt.rcParams.update({
+        'font.family': 'Arial',
+        'font.size': 9,
+        'axes.labelsize': 10,
+        'axes.titlesize': 10,
+        'xtick.labelsize': 8,
+        'ytick.labelsize': 8,
+        'legend.fontsize': 8,
+        'axes.spines.right': False,
+        'axes.spines.top': False,
+        'axes.grid': True,
+        'grid.alpha': 0.3,
+        'grid.linestyle': '--'
+    })
+    
+    # Custom color palette
+    colors = {
+        'Train AUC': '#2C3E50',       # Dark blue
+        'Validation AUC': '#E74C3C',  # Red
+        'Test AUC': '#27AE60',        # Green
+        'Train_Stability': '#2C3E50',
+        'Val_Stability': '#E74C3C'
+    }
+    
+    # Set up figure with adjusted spacing
+    fig = plt.figure(figsize=(15, 10))
+    gs = gridspec.GridSpec(2, 3, figure=fig)
+    gs.update(wspace=0.6, hspace=0.4)  # Reduced spacing
+
+    # Panel A: AUC by phenotype and GWAS
+    ax1 = fig.add_subplot(gs[0, 0])
+    pivot_data = df.pivot_table(
+        values=['Train AUC', 'Validation AUC', 'Test AUC'],
+        index=['phenotype', 'gwas_file'],
+        aggfunc='max'
+    ).reset_index()
+    pivot_data['combined_label'] = pivot_data['phenotype'] + '\n' + pivot_data['gwas_file']
+    width = 0.25
+    x = np.arange(len(pivot_data))
+    ax1.bar(x - width, pivot_data['Train AUC'], width, label='Train', color=colors['Train AUC'])
+    ax1.bar(x, pivot_data['Validation AUC'], width, label='Validation', color=colors['Validation AUC'])
+    ax1.bar(x + width, pivot_data['Test AUC'], width, label='Test', color=colors['Test AUC'])
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(pivot_data['combined_label'], rotation=45, ha='right')
+    ax1.set_title('A) AUC by Phenotype', pad=8)
+    ax1.set_ylabel('AUC Score')
+    ax1.set_ylim(0, 1.0)
+    ax1.legend(bbox_to_anchor=(1.02, 1), loc='upper left', frameon=False)
+
+    # Panel B: Dataset Type Performance
+    ax2 = fig.add_subplot(gs[0, 1])
+    metrics = ['Train AUC', 'Validation AUC', 'Test AUC']
+    melted_df = pd.melt(df, value_vars=metrics, id_vars=['Dataset_Type'])
+    sns.violinplot(x='Dataset_Type', y='value', hue='variable', data=melted_df, 
+                  palette=colors, split=True, inner='box', ax=ax2)
+    ax2.set_title('B) Dataset Performance', pad=8)
+    ax2.set_xlabel('Dataset Type')
+    ax2.set_ylabel('AUC Score')
+    ax2.set_ylim(0.4, 1.1)
+    ax2.tick_params(axis='x', rotation=45)
+    ax2.set_xticklabels(ax2.get_xticklabels(), ha='right')
+    ax2.legend(bbox_to_anchor=(1.02, 1), loc='upper left', frameon=False)
+
+    # Panel C: Weight File Impact
+    ax3 = fig.add_subplot(gs[0, 2])
+    melted_df = pd.melt(df, value_vars=metrics, id_vars=['weight_file_present'])
+    sns.boxplot(x='weight_file_present', y='value', hue='variable', data=melted_df,
+                palette=colors, ax=ax3, width=0.7)
+    ax3.set_title('C) Weight File Impact', pad=8)
+    ax3.set_xlabel('Weight File Present')
+    ax3.set_ylabel('AUC Score')
+    ax3.set_ylim(0.5, 1.0)
+    ax3.tick_params(axis='x', rotation=45)
+    ax3.set_xticklabels(ax3.get_xticklabels(), ha='right')
+    ax3.legend(bbox_to_anchor=(1.02, 1), loc='upper left', frameon=False)
+
+    # Panel D: SNP Analysis
+    ax4 = fig.add_subplot(gs[1, 0])
+    if 'snps' in df.columns:
+        melted_df = pd.melt(df, value_vars=metrics, id_vars=['snps'])
+        sns.boxplot(x='snps', y='value', hue='variable', data=melted_df,
+                   palette=colors, ax=ax4, width=0.7)
+    ax4.set_title('D) SNP Analysis', pad=8)
+    ax4.set_xlabel('SNP Type')
+    ax4.set_ylabel('AUC Score')
+    ax4.tick_params(axis='x', rotation=45)
+    ax4.set_xticklabels(ax4.get_xticklabels(), ha='right')
+    ax4.set_ylim(0.5, 1.0)
+    ax4.legend(bbox_to_anchor=(1.02, 1), loc='upper left', frameon=False)
+
+    # Panel E: Model Performance
+    ax5 = fig.add_subplot(gs[1, 1])
+    melted_df = pd.melt(df, value_vars=metrics, id_vars=['model'])
+    sns.boxplot(x='model', y='value', hue='variable', data=melted_df,
+                palette=colors, ax=ax5, width=0.7)
+    ax5.set_title('E) Model Performance', pad=8)
+    ax5.set_xlabel('Model Type')
+    ax5.set_ylabel('AUC Score')
+    ax5.set_ylim(0.45, 0.65)
+    ax5.tick_params(axis='x', rotation=45)
+    ax5.set_xticklabels(ax5.get_xticklabels(), ha='right')
+    ax5.legend(bbox_to_anchor=(1.02, 1), loc='upper left', frameon=False)
+
+    # Panel F: Stability Analysis
+    ax6 = fig.add_subplot(gs[1, 2])
+    stability_metrics = ['Train_Stability', 'Val_Stability']
+    melted_df = pd.melt(df, value_vars=stability_metrics, id_vars=['Model'])
+    sns.boxplot(x='Model', y='value', hue='variable', data=melted_df,
+                palette={'Train_Stability': colors['Train AUC'], 
+                        'Val_Stability': colors['Validation AUC']}, 
+                ax=ax6, width=0.7)
+    ax6.set_title('F) Model Stability', pad=8)
+    ax6.set_xlabel('Model Type')
+    ax6.set_ylabel('Stability Score')
+    ax6.set_ylim(0.84, 1.0)
+    ax6.tick_params(axis='x', rotation=45)
+    ax6.set_xticklabels(ax6.get_xticklabels(), ha='right')
+    ax6.legend(bbox_to_anchor=(1.02, 1), loc='upper left', frameon=False)
+
+    # Overall figure title with adjusted position
+    plt.suptitle('Exploratory Data Analysis Overview', 
+                fontsize=12, 
+                y=0.98,  # Moved closer to the figure
+                weight='bold')
+    
+    # Save figure with higher DPI and optimal format settings
+    for fmt in ['pdf', 'png']:
+        fig.savefig(
+            os.path.join(output_dir, f'publication_figure.{fmt}'),
+            dpi=600,  # Increased DPI for better quality
+            bbox_inches='tight',
+            pad_inches=0.1,
+            format=fmt,
+            transparent=False,  # Solid background for publication
+        )
+    plt.close(fig)
+
 def main():
     """Main execution function."""
     if len(sys.argv) != 3:
@@ -581,6 +728,14 @@ def main():
     except Exception as e:
         print(f"Error generating report: {str(e)}")
 
+    # Generate publication figure
+    try:
+        print("Generating publication figure...")
+        create_publication_figure(df, output_dir)
+        print("Successfully created publication figure")
+    except Exception as e:
+        print(f"Error generating publication figure: {str(e)}")
+
     print(f"\nAnalysis completed. Results saved in {output_dir}")
     print("\nGenerated files:")
     for file in os.listdir(output_dir):
@@ -588,3 +743,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+  
