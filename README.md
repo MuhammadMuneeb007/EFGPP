@@ -397,26 +397,9 @@ for _, row in results_df.iterrows():
 ```
 The selected datasets for Configuration 1 and Configuration 2 are presented in Table 1 and on GitHub (Configuration1/best_datasets.csv and Configuration2/best_datasets.csv).
 
-| Dataset Type | Configuration 1 | Configuration 2 |
-|--------------|-----------------|-----------------|
-| Covariates   | Covariates      | Covariates      |
-| Genotype     | Genotype UW annotated migraine | Genotype UW annotated |
-| Genotype     | Genotype UW not annotated migraine | Genotype UW not annotated |
-| Genotype     | Genotype W annotated migraine | Genotype W annotated |
-| Genotype     | Genotype W not annotated migraine | Genotype W not annotated |
-| PCA          | PCA 10.0        | PCA 10.0        |
-| PRS          | PRS migraine 5 AnnoPred | PRS AnnoPred depression 4 |
-| PRS          | PRS migraine 5 LDAK-GWAS | PRS AnnoPred migraine |
-| PRS          | PRS migraine AnnoPred | PRS AnnoPred migraine 5 |
-| PRS          | PRS migraine LDAK-GWAS | PRS LDAK-GWAS depression 11 |
-| PRS          | PRS migraine Plink | PRS LDAK-GWAS migraine |
-| PRS          | –               | PRS LDAK-GWAS migraine 5 |
-| PRS          | –               | PRS PRSice-2 depression 11 |
-| PRS          | –               | PRS Plink depression 11 |
-| PRS          | –               | PRS Plink depression 4 |
-| PRS          | –               | PRS Plink migraine |
+![image](https://github.com/user-attachments/assets/97fb6670-f91f-414a-a25e-b6ccf6e1681b)
 
-
+ 
 
 
 Command:
