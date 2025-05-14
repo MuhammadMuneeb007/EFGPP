@@ -1,5 +1,8 @@
 # Exploratory Framework for Genotype-Phenotype Prediction
 
+## Poster
+![Poster](Poster.png)
+
 ## Abstract
 
 Genotype-phenotype prediction requires diverse data, including genetic variants, functional annotations (FA), linkage disequilibrium, polygenic risk scores (PRS), covariates, and genome-wide association studies (GWAS). We present a framework to optimize data integration for phenotype prediction. Using UK Biobank genotypes (733 samples), 2 GWAS for migraine, 3 for depression, publicly available FA, and 4 PRS tools, we tested various combinations of datasets for migraine prediction. The best individual dataset performance achieved a test AUC of 0.643899 (±0.143235). However, when different combinations were formed—configuration 1 (migraine-related data sources) and configuration 2 (migraine and depression-related data sources)—the combination of covariates, PRS-PLINK, and weighted-annotated genotype data in Configuration 1 achieved a test AUC of 0.685461 (±0.127186). In configuration 2, combining unweighted-annotated genotype data and PRS-LDAK achieved a test AUC of 0.663471 (±0.048293). We observed that the inclusion of PRS, covariates, PRS from AnnoPred and LDAK, and annotated genotype data improves prediction performance.
