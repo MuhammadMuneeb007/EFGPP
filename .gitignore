@@ -1,0 +1,37 @@
+# EFGPP2 local registry and large scientific assets
+.efgpp2/
+data/
+models/
+reports/
+
+# Genotype / sequencing formats
+*.bed
+*.bim
+*.fam
+*.pgen
+*.pvar
+*.psam
+*.bgen
+*.sample
+*.vcf
+*.vcf.gz
+*.bcf
+
+# Large analytical artifacts
+*.parquet
+*.feather
+*.zarr/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
